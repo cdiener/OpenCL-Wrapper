@@ -1249,8 +1249,10 @@ namespace ocl{
 	  ret << indent << "else";
 	  if(pos < wordsSize && (!words[pos].compare("if") || !words[pos].compare("{")))
 	    space = 0;
-	  else
+	  else{
+	    ret << "\n   ";
 	    space = 2;
+	  }
 	}
 	else if(!tmp.compare("elseif")){
 	  ret << indent << "else if";
