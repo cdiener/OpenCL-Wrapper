@@ -13,6 +13,7 @@
 #include <sstream>
 #include <vector>
 
+#include <sys/stat.h>
 #include <stdarg.h>
 
 #if  defined(__APPLE__) || defined(__MACOSX)
@@ -400,22 +401,21 @@ void ocl_kernel::setup(ocl_device* d, std::string str){
 
   cl_int err;
 
-  if(std::ifstream(str.c_str())){
-    std::ifstream file(str.c_str());
-
-    file.seekg(0,std::ios::end);
-    int length = file.tellg();
-    file.seekg(0,std::ios::beg);
-  
-    char* tmp = new char[length];
-    file.read(tmp,length);
+  FILE* file = fopen(str.c_str(),"r");
+  if(file){
+    struct stat statbuf;
+    stat(str.c_str(),&statbuf);
+    char* tmp = new char[statbuf.st_size+1];
+    fread(tmp,statbuf.st_size+1,1,file);
+    tmp[statbuf.st_size] = '\0';
 
     function = tmp;
     delete[] tmp;
+    fclose(file);
   }
   else
     function = str;
-
+ 
   getKernelInformation(function);
   
   if(format)
@@ -435,7 +435,6 @@ void ocl_kernel::setup(ocl_device* d, std::string str){
 
   err = clGetProgramBuildInfo(program, device->getDeviceID(), CL_PROGRAM_BUILD_LOG, 0, NULL, &logSize);    
   ocl::printError("OCL_Kernel ("+name+") : Building Program",err);
-
   if(logSize > 2){
     log = new char[logSize];
 
@@ -443,10 +442,10 @@ void ocl_kernel::setup(ocl_device* d, std::string str){
     ocl::printError("OCL_Kernel ("+name+") : Building Program",err);
     log[logSize] = '\0';
     
-    if(!format)
-      std::cout << ocl::getFormattedKernel(function) << std::endl;
-    else
+    if(format)
       std::cout << function << std::endl;
+    else
+      std::cout << ocl::getFormattedKernel(function) << std::endl;
 
     std::cout << "OCL_Kernel (" << name << "): Build Log\n" << log;
 
