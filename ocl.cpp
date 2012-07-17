@@ -51,6 +51,9 @@ ocl_setup::ocl_setup(const ocl_setup& s){
 }
 
 ocl_setup::~ocl_setup(){
+  if(allocs == NULL)
+    return;
+
   if(allocs[0] > 1)
     allocs[0]--;
   else{
@@ -326,6 +329,9 @@ ocl_kernel::ocl_kernel(ocl_device* d, std::string str, std::string fstr, int n){
 }
 
 ocl_kernel::~ocl_kernel(){
+  if(allocs == NULL)
+    return;
+
   if(allocs[0] > 1)
     allocs[0]--;
   else{
@@ -756,6 +762,9 @@ ocl_device::ocl_device(cl_platform_id p, cl_device_id d){
 }
 
 ocl_device::~ocl_device(){
+  if(allocs == NULL)
+    return;
+
   if(allocs[0] > 1)
     allocs[0]--;
   else{
@@ -875,6 +884,9 @@ ocl_context::ocl_context(const ocl_context& c){
 }
 
 ocl_context::~ocl_context(){
+  if(allocs == NULL)
+    return;
+
   if(allocs[0] > 1)
     allocs[0]--;
   else{
@@ -939,6 +951,9 @@ ocl_commandQueue::ocl_commandQueue(const ocl_commandQueue& cq){
 }
 
 ocl_commandQueue::~ocl_commandQueue(){
+  if(allocs == NULL)
+    return;
+
   if(allocs[0] > 1)
     allocs[0]--;
   else{
@@ -1023,6 +1038,9 @@ ocl_mem::ocl_mem(ocl_device* d, cl_mem m, size_t s){
 }
 
 ocl_mem::~ocl_mem(){
+  if(allocs == NULL)
+    return;
+
   if(allocs[0] > 1)
     allocs[0]--;
   else{
