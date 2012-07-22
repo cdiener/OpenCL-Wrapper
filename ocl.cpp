@@ -101,7 +101,8 @@ void ocl_setup::copyCheck(int* allocs2){
 }
 
 void ocl_setup::findDevices(){
-  int maxP = 64,maxD = 64;
+  const int maxP = 64;
+  const int maxD = 64;
   cl_platform_id pID2[maxP];
   cl_device_id dID2[maxD];
 
@@ -121,7 +122,7 @@ void ocl_setup::findDevices(){
 }
 
 void ocl_setup::findDeviceInformation(){
-  int bSize = 8192;
+  const int bSize = 8192;
   char buffer[bSize];
   cl_ulong buf_ulong;
   cl_uint buf_uint;
@@ -585,7 +586,8 @@ void ocl_kernel::setDims(int pos, size_t lDim, size_t gDim){
       exit(1);
   }
     
-  dims = dims > pos ? dims : pos;
+  if(dims < (pos+1))
+     dims = pos+1;
   lDims[pos] = lDim;
   gDims[pos] = gDim;
 }
@@ -649,12 +651,12 @@ void ocl_kernel::run(){
 
 int ocl_kernel::timedRun(size_t lDim, size_t gDim){
   setDims(lDim,gDim);
-  timedRun();
+  return timedRun();
 }
 
 int ocl_kernel::timedRun(int num, size_t* lDim, size_t* gDim){
   setDims(num,lDim,gDim);
-  timedRun();
+  return timedRun();
 }
 
 int ocl_kernel::timedRun(){
@@ -1162,7 +1164,7 @@ namespace ocl{
 
   const int typeSize[] = {
     1 ,    16,    2  ,    4  ,    4 ,    8 ,
-    8 ,    8 ,    128,    16 ,    32,    32,
+    sizeof(cl_mem) ,    8 ,    128,    16 ,    32,    32,
     64,    4 ,    64 ,    8  ,    16,    16,
     32,    2 ,    4  ,    64 ,    8 ,    16,
     16,    32,    8  ,    128,    16,    32,
@@ -1427,17 +1429,19 @@ namespace ocl{
 	while(i < length && isspace(s[i]))
 	  i++;
       }
+      
+      if(i < length){
+	found1 = delim1.find(s[i]);
+	if(found1 && !(s[i]-'#')){
+	  offset = i+1;
+	  while(++i<length && (s[i] - '\n')){}
+	  words.push_back("#");
+	  words.push_back(s.substr(offset,i-offset+1));
+	  wType.push_back(1);
+	  wType.push_back(-1);
 
-      found1 = delim1.find(s[i]);
-      if(found1 && !(s[i]-'#')){
-	offset = i+1;
-	while(++i<length && (s[i] - '\n')){}
-	words.push_back("#");
-	words.push_back(s.substr(offset,i-offset+1));
-	wType.push_back(1);
-	wType.push_back(-1);
-
-	writing = 0;
+	  writing = 0;
+	}
       }
       while(i < length && (found1 != std::string::npos)){
 	found = 1;
