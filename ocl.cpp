@@ -443,7 +443,7 @@ void ocl_kernel::setup(ocl_device* d, std::string str){
   err = clGetProgramBuildInfo(program, device->getDeviceID(), CL_PROGRAM_BUILD_LOG, 0, NULL, &logSize);    
   ocl::printError("OCL_Kernel ("+name+") : Building Program",err);
   if(logSize > 2){
-    log = new char[logSize];
+    log = new char[logSize+1];
 
     err = clGetProgramBuildInfo(program, device->getDeviceID(), CL_PROGRAM_BUILD_LOG, logSize, log, NULL);  
     ocl::printError("OCL_Kernel ("+name+") : Building Program",err);
