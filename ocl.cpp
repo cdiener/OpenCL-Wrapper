@@ -106,7 +106,7 @@ void ocl_setup::findDevices(){
   cl_platform_id pID2[maxP];
   cl_device_id dID2[maxD];
 
-  clGetPlatformIDs(maxP, pID2, &pSize);	
+  clGetPlatformIDs(maxP, pID2, &pSize);
   pID = new cl_platform_id[pSize];
   dID = new cl_device_id*[pSize];
   dSize = new cl_uint[pSize];
@@ -128,7 +128,7 @@ void ocl_setup::findDeviceInformation(){
   cl_uint buf_uint;
   std::stringstream str;
   cl_int err;
-  
+
   std::string line = "";
   line.append(118,'-');
   line.append(1,'\n');
@@ -141,7 +141,7 @@ void ocl_setup::findDeviceInformation(){
     str << "PLATFORM: " << i << '\n';
     ocl::printError("PLATFORM NAME",clGetPlatformInfo(pID[i], CL_PLATFORM_NAME , bSize, buffer, NULL));
     str << "\tPLATFORM_NAME       : " << buffer << '\n';
-    
+
     ocl::printError("PLATFORM VERSION",clGetPlatformInfo(pID[i], CL_PLATFORM_VERSION, bSize, buffer, NULL));
     str << "\tPLATFORM_VERSION    : " << buffer << '\n';
     str << starLine;
@@ -166,27 +166,27 @@ void ocl_setup::findDeviceInformation(){
 
   str.str("");
 
-  for(int i=0;i<pSize;i++){    
+  for(int i=0;i<pSize;i++){
     str << line;
     str << "PLATFORM            : " << i << '\n';
-    
+
     ocl::printError("PLATFORM PROFILE",clGetPlatformInfo(pID[i], CL_PLATFORM_PROFILE, bSize, buffer, NULL));
     str << "PLATFORM_PROFILE    : " << buffer << '\n';
-    
+
     ocl::printError("PLATFORM VERSION",clGetPlatformInfo(pID[i], CL_PLATFORM_VERSION, bSize, buffer, NULL));
     str << "PLATFORM_VERSION    : " << buffer << '\n';
-    
+
     ocl::printError("PLATFORM NAME",clGetPlatformInfo(pID[i], CL_PLATFORM_NAME , bSize, buffer, NULL));
     str << "PLATFORM_NAME       : " << buffer << '\n';
-    
+
     ocl::printError("PLATFORM VENDOR",clGetPlatformInfo(pID[i], CL_PLATFORM_VENDOR , bSize, buffer, NULL));
     str << "PLATFORM_VENDOR     : " << buffer << '\n';
-    
+
     ocl::printError("PLATFORM EXTENSIONS",clGetPlatformInfo(pID[i], CL_PLATFORM_EXTENSIONS, bSize, buffer, NULL));
     str << "PLATFORM_EXTENSIONS : " << buffer << "\n\n";
 
     str << starLine;
-      
+
     for(int j=0;j<dSize[i];j++){
       str << "\tDevice                             : " << j << std::endl;
 
@@ -203,33 +203,33 @@ void ocl_setup::findDeviceInformation(){
       str << "\tDRIVER_VERSION                     : " <<  buffer << std::endl;
 
       ocl::printError("DEVICE_MAX_COMPUTE_UNITS",
-		      clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(buf_uint), &buf_uint, NULL));
+					  clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(buf_uint), &buf_uint, NULL));
       str << "\tDEVICE_MAX_COMPUTE_UNITS           : " << (unsigned int)buf_uint << std::endl;
 
       ocl::printError("DEVICE_MAX_CLOCK_FREQUENCY",
-		      clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_CLOCK_FREQUENCY, sizeof(buf_uint), &buf_uint, NULL));
+					  clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_CLOCK_FREQUENCY, sizeof(buf_uint), &buf_uint, NULL));
       str << "\tDEVICE_MAX_CLOCK_FREQUENCY         : " <<  (unsigned int)buf_uint << std::endl;
 
       ocl::printError("DEVICE_GLOBAL_MEM_SIZE",
-		      clGetDeviceInfo(dID[i][j], CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(buf_ulong), &buf_ulong, NULL));
+					  clGetDeviceInfo(dID[i][j], CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(buf_ulong), &buf_ulong, NULL));
       str << "\tDEVICE_GLOBAL_MEM_SIZE             : " <<  (unsigned long long)buf_ulong << std::endl;
 
       ocl::printError("DEVICE_MAX_WORK_GROUP_SIZE",
-		      clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(buf_ulong), &buf_ulong, NULL));
+					  clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(buf_ulong), &buf_ulong, NULL));
       str << "\tDEVICE_MAX_WORK_GROUP_SIZE         : " <<  (unsigned long long)buf_ulong << std::endl;
 
       size_t workitem_dims;
       ocl::printError("GET_MAX_ITEM_DIMENSIONS",
-		      clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(workitem_dims), &workitem_dims, NULL));
+					  clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(workitem_dims), &workitem_dims, NULL));
       str << "\tCL_DEVICE_MAX_WORK_ITEM_DIMENSIONS : " <<  (unsigned int) workitem_dims << std::endl;
-	    
+
       size_t workitem_size[3];
       ocl::printError("GET_MAX_WORK_ITEM_SIZES",
-		      clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(workitem_size), &workitem_size, NULL));
-      str << "\tCL_DEVICE_MAX_WORK_ITEM_SIZES      : " 
-	  << (int) workitem_size[0] << " / " 
-	  << (int) workitem_size[1] << " / " 
-	  << (int) workitem_size[2] << std::endl;
+					  clGetDeviceInfo(dID[i][j], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(workitem_size), &workitem_size, NULL));
+      str << "\tCL_DEVICE_MAX_WORK_ITEM_SIZES      : "
+		  << (int) workitem_size[0] << " / "
+		  << (int) workitem_size[1] << " / "
+		  << (int) workitem_size[2] << std::endl;
       str << starLine;
     }
   }
@@ -238,7 +238,7 @@ void ocl_setup::findDeviceInformation(){
   longInfo = str.str();
 }
 
-ocl_device ocl_setup::displayDevices(){  
+ocl_device ocl_setup::displayDevices(){
   if(shortInfo.empty())
     findDeviceInformation();
 
@@ -246,7 +246,7 @@ ocl_device ocl_setup::displayDevices(){
   int di = 1,dj = 3;
   int i,j;
 
-  std::cout << shortInfo;  
+  std::cout << shortInfo;
 
   printf(question1.c_str(),di,dj);
   gets(buffer);
@@ -277,7 +277,7 @@ cl_platform_id ocl_setup::getPlatformID(int p){
 
 cl_device_id ocl_setup::getDeviceID(int p, int d){
   return dID[p][d];
-} 
+}
 
 //-----------------------------//
 //          OCL_KERNEL          //
@@ -306,7 +306,7 @@ ocl_kernel::ocl_kernel(ocl_device* d, std::string str){
 ocl_kernel::ocl_kernel(ocl_device* d, std::string str, std::string fstr){
   allocs = new int[1];
   allocs[0] = 1;
-  
+
   flags = fstr;
   format = 1;
   setup(d,str);
@@ -315,7 +315,7 @@ ocl_kernel::ocl_kernel(ocl_device* d, std::string str, std::string fstr){
 ocl_kernel::ocl_kernel(ocl_device* d, std::string str, int n){
   allocs = new int[1];
   allocs[0] = 1;
-  
+
   format = n;
   setup(d,str);
 }
@@ -323,7 +323,7 @@ ocl_kernel::ocl_kernel(ocl_device* d, std::string str, int n){
 ocl_kernel::ocl_kernel(ocl_device* d, std::string str, std::string fstr, int n){
   allocs = new int[1];
   allocs[0] = 1;
-  
+
   flags = fstr;
   format = n;
   setup(d,str);
@@ -376,7 +376,7 @@ void ocl_kernel::destructor(){
 
     delete[] lDims;
     delete[] gDims;
-    
+
     clReleaseKernel(kernel);
     clReleaseProgram(program);
   }
@@ -422,16 +422,16 @@ void ocl_kernel::setup(ocl_device* d, std::string str){
   }
   else
     function = str;
- 
+
   getKernelInformation(function);
-  
+
   if(format)
     function = ocl::getFormattedKernel(function);
 
   const char* cFunction = function.c_str();
   const size_t cLength = function.length();
   cl_device_id dID = device->getDeviceID();
-  
+
   cl_int err2;
   program = clCreateProgramWithSource(device->getContext(),1,&cFunction,&cLength,&err2);
 
@@ -440,15 +440,15 @@ void ocl_kernel::setup(ocl_device* d, std::string str){
   char* log;
   size_t logSize;
 
-  err = clGetProgramBuildInfo(program, device->getDeviceID(), CL_PROGRAM_BUILD_LOG, 0, NULL, &logSize);    
+  err = clGetProgramBuildInfo(program, device->getDeviceID(), CL_PROGRAM_BUILD_LOG, 0, NULL, &logSize);
   ocl::printError("OCL_Kernel ("+name+") : Building Program",err);
   if(logSize > 2){
     log = new char[logSize+1];
 
-    err = clGetProgramBuildInfo(program, device->getDeviceID(), CL_PROGRAM_BUILD_LOG, logSize, log, NULL);  
+    err = clGetProgramBuildInfo(program, device->getDeviceID(), CL_PROGRAM_BUILD_LOG, logSize, log, NULL);
     ocl::printError("OCL_Kernel ("+name+") : Building Program",err);
     log[logSize] = '\0';
-    
+
     if(format)
       std::cout << function << std::endl;
     else
@@ -473,10 +473,10 @@ void ocl_kernel::getKernelInformation(std::string str){
 
   if(start < 9){
     std::cout << "OCL_Kernel : Getting Kernel Information Error\n"
-	      << "Exiting Program.\n";
+			  << "Exiting Program.\n";
     exit(1);
   }
-  
+
   std::string dm = " \t\n(*";
 
   while(dm.find(str[start],0) == std::string::npos)
@@ -508,7 +508,7 @@ void ocl_kernel::getKernelInformation(std::string str){
       inputs++;
     end++;
   }
-  
+
   int* pointer = new int[inputs]();
   inputType.resize(inputs);
   inputSize = new int[inputs];
@@ -517,17 +517,17 @@ void ocl_kernel::getKernelInformation(std::string str){
   for(int i=0;i<inputs;i++){
     while(str[pos] != ',' && str[pos] != ')'){
       if(str[pos] == '*')
-	pointer[i]++;
+		pointer[i]++;
       pos++;
-    }    
-    inputSize[i] = pos++;    
+    }
+    inputSize[i] = pos++;
 
     while(dm.find(str[inputSize[i]],0) != std::string::npos)
       inputSize[i]--;
     while(dm.find(str[inputSize[i]],0) == std::string::npos)
       inputSize[i]--;
     while(dm.find(str[inputSize[i]],0) != std::string::npos)
-      inputSize[i]--;    
+      inputSize[i]--;
   }
 
   for(int i=0;i<inputs;i++){
@@ -539,9 +539,9 @@ void ocl_kernel::getKernelInformation(std::string str){
       pos = inputSize[i];
 
       while(dm.find(str[pos],0) == std::string::npos){
-	pos--;
-      }      
-      
+		pos--;
+      }
+
       inputType[i] = str.substr(pos+1,inputSize[i]-pos);
       inputSize[i] = sizeofType(inputType[i]);
     }
@@ -558,7 +558,7 @@ int ocl_kernel::sizeofType(std::string type){
   while(0 <= left && right < ocl::types){
     current = (left + right)/2;
     check = type.compare(ocl::type[current]);
-    
+
     if(!check)
       return ocl::typeSize[current];
     else if(0 < check)
@@ -568,7 +568,7 @@ int ocl_kernel::sizeofType(std::string type){
 
     if(current == (left+right)/2){
       std::cout << "OCL_Kernel ("+name+") : Type <" << type << "> not found in oclInfo\n"
-		<< "Exiting Program.\n";
+				<< "Exiting Program.\n";
       exit(1);
     }
   }
@@ -582,12 +582,12 @@ void ocl_kernel::setDims(size_t lDim, size_t gDim){
 void ocl_kernel::setDims(int pos, size_t lDim, size_t gDim){
   if(pos < 0 || pos > 2){
     std::cout << "OCL_Kernel ("+name+") : Dimension " << pos << " is out of bounds\n"
-		<< "Exiting Program.\n";
-      exit(1);
+			  << "Exiting Program.\n";
+	exit(1);
   }
-    
+
   if(dims < (pos+1))
-     dims = pos+1;
+	dims = pos+1;
   lDims[pos] = lDim;
   gDims[pos] = gDim;
 }
@@ -595,8 +595,8 @@ void ocl_kernel::setDims(int pos, size_t lDim, size_t gDim){
 void ocl_kernel::setDims(int num, size_t* lDim, size_t* gDim){
   if(num < 0 || num > 2){
     std::cout << "OCL_Kernel ("+name+") : Dimension " << num << " is out of bounds\n"
-		<< "Exiting Program.\n";
-      exit(1);
+			  << "Exiting Program.\n";
+	exit(1);
   }
 
   dims = num;
@@ -610,10 +610,10 @@ void ocl_kernel::setArgs(void* x, ...){
   va_list list;
   va_start(list,x);
   ocl::printError("OCL_Kernel ("+name+") : Setting Kernel Arguments",
-		  clSetKernelArg(kernel,0,inputSize[0],x));
+				  clSetKernelArg(kernel,0,inputSize[0],x));
   for(int i=1;i<inputs;i++)
     ocl::printError("OCL_Kernel ("+name+") : Setting Kernel Arguments",
-		    clSetKernelArg(kernel,i,inputSize[i],(void*) va_arg(list,void*)));
+					clSetKernelArg(kernel,i,inputSize[i],(void*) va_arg(list,void*)));
 
   va_end(list);
 }
@@ -622,12 +622,12 @@ void ocl_kernel::setArg(int pos, void* arg){
   if(pos >= inputs || pos < 0)
     ocl::printError("OCL_Kernel ("+name+") : Incorrect Kernel Argument Position",15);
   ocl::printError("OCL_Kernel ("+name+") : Setting Kernel Arguments",
-		  clSetKernelArg(kernel,pos,inputSize[pos],arg));
+				  clSetKernelArg(kernel,pos,inputSize[pos],arg));
 }
 
 std::string ocl_kernel::getArgType(int pos){
   if(pos >= inputs || pos < 0)
-    ocl::printError("OCL_Kernel ("+name+") : Incorrect Kernel Argument Position",15);    
+    ocl::printError("OCL_Kernel ("+name+") : Incorrect Kernel Argument Position",15);
   return inputType[pos];
 }
 
@@ -646,7 +646,7 @@ void ocl_kernel::run(){
   const size_t c_lDims[3] = {lDims[0],lDims[1],lDims[2]};
   const size_t c_gDims[3] = {gDims[0],gDims[1],gDims[2]};
   ocl::printError("OCL_Kernel ("+name+") : Kernel Run",
-		  clEnqueueNDRangeKernel(device->getCommandQueue(),kernel,c_dims,NULL,c_gDims,c_lDims,0,NULL,NULL));  
+				  clEnqueueNDRangeKernel(device->getCommandQueue(),kernel,c_dims,NULL,c_gDims,c_lDims,0,NULL,NULL));
 }
 
 int ocl_kernel::timedRun(size_t lDim, size_t gDim){
@@ -666,7 +666,7 @@ int ocl_kernel::timedRun(){
   cl_event event;
 
   ocl::printError("OCL_Kernel ("+name+") : Kernel Timed Run",
-		  clEnqueueNDRangeKernel(device->getCommandQueue(),kernel,c_dims,NULL,c_gDims,c_lDims,0,NULL,&event));
+				  clEnqueueNDRangeKernel(device->getCommandQueue(),kernel,c_dims,NULL,c_gDims,c_lDims,0,NULL,&event));
 
   events->push_back(event);
 
@@ -685,7 +685,7 @@ float ocl_kernel::getRunTime(int i){
   clWaitForEvents(1,&event);
 
   clGetEventProfilingInfo(event,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&start,NULL);
-  clGetEventProfilingInfo(event,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&end,NULL);  
+  clGetEventProfilingInfo(event,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&end,NULL);
 
   return (end-start)*1.e-6;
 }
@@ -698,7 +698,7 @@ void ocl_kernel::printFormattedKernel(){
   if(format)
     std::cout << function << std::endl;
   else
-    std::cout << ocl::getFormattedKernel(function) << std::endl;    
+    std::cout << ocl::getFormattedKernel(function) << std::endl;
 }
 
 cl_kernel ocl_kernel::getKernel(){
@@ -716,16 +716,16 @@ std::string ocl_kernel::getName(){
 std::string ocl_kernel::getFunction(){
   return function;
 }
- 
+
 std::string ocl_kernel::getFlags(){
   return flags;
-}  
+}
 
 int ocl_kernel::getWarpSize(){
   size_t ret;
   ocl::printError("OCL_DEVICE: Getting Warp Size",
-		  clGetKernelWorkGroupInfo(kernel,device->getDeviceID(),CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE,
-					   sizeof(size_t),&ret,NULL));
+				  clGetKernelWorkGroupInfo(kernel,device->getDeviceID(),CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE,
+										   sizeof(size_t),&ret,NULL));
   return ret;
 }
 
@@ -777,8 +777,8 @@ ocl_device::~ocl_device(){
 
 ocl_device& ocl_device::operator=(const ocl_device& d){
   copyCheck(d.allocs);
-  pID = d.pID; 
-  dID = d.dID; 
+  pID = d.pID;
+  dID = d.dID;
   if(groupSize == NULL)
     groupSize = new int[3];
 
@@ -815,7 +815,7 @@ void ocl_device::refresh(){
   commandQueue.create(context.getContext(),dID);
   size_t* tmp = new size_t[3];
   ocl::printError("GET_MAX_WORK_ITEM_SIZES",
-		  clGetDeviceInfo(dID, CL_DEVICE_MAX_WORK_ITEM_SIZES, 3*sizeof(size_t), tmp, NULL));
+				  clGetDeviceInfo(dID, CL_DEVICE_MAX_WORK_ITEM_SIZES, 3*sizeof(size_t), tmp, NULL));
   groupSize[0] = tmp[0];
   groupSize[1] = tmp[1];
   groupSize[2] = tmp[2];
@@ -874,7 +874,7 @@ int ocl_device::getGroupSize(int p){
 //-----------------------------//
 //         OCL_CONTEXT         //
 //-----------------------------//
-  
+
 ocl_context::ocl_context(){
   allocs = NULL;
 }
@@ -899,7 +899,7 @@ ocl_context::~ocl_context(){
 
 ocl_context& ocl_context::operator=(const ocl_context& c){
   copyCheck(c.allocs);
-  context = c.context;  
+  context = c.context;
   return *this;
 }
 
@@ -941,7 +941,7 @@ cl_context ocl_context::getContext(){
 //-----------------------------//
 //      OCL_COMMANDQUEUE       //
 //-----------------------------//
- 
+
 ocl_commandQueue::ocl_commandQueue(){
   allocs = NULL;
 }
@@ -966,7 +966,7 @@ ocl_commandQueue::~ocl_commandQueue(){
 
 ocl_commandQueue& ocl_commandQueue::operator=(const ocl_commandQueue& cq){
   copyCheck(cq.allocs);
-  commandQueue = cq.commandQueue;  
+  commandQueue = cq.commandQueue;
   return *this;
 }
 
@@ -1087,19 +1087,19 @@ void ocl_mem::free(){
 }
 
 void ocl_mem::copyTo(void* v){
-  clEnqueueReadBuffer(device->getCommandQueue(), memory, CL_TRUE, 0, size, v,0,NULL,NULL);  
+  clEnqueueReadBuffer(device->getCommandQueue(), memory, CL_TRUE, 0, size, v,0,NULL,NULL);
 }
 
 void ocl_mem::copyTo(void* v, size_t offset, size_t s){
-  clEnqueueReadBuffer(device->getCommandQueue(), memory, CL_TRUE, offset, s, v,0,NULL,NULL);  
+  clEnqueueReadBuffer(device->getCommandQueue(), memory, CL_TRUE, offset, s, v,0,NULL,NULL);
 }
 
 void ocl_mem::copyToNB(void* v){
-  clEnqueueReadBuffer(device->getCommandQueue(), memory, CL_FALSE, 0, size, v,0,NULL,NULL);  
+  clEnqueueReadBuffer(device->getCommandQueue(), memory, CL_FALSE, 0, size, v,0,NULL,NULL);
 }
 
 void ocl_mem::copyToNB(void* v, size_t offset, size_t s){
-  clEnqueueReadBuffer(device->getCommandQueue(), memory, CL_FALSE, offset, s, v,0,NULL,NULL);  
+  clEnqueueReadBuffer(device->getCommandQueue(), memory, CL_FALSE, offset, s, v,0,NULL,NULL);
 }
 
 void ocl_mem::copyFrom(void* v){
@@ -1107,7 +1107,7 @@ void ocl_mem::copyFrom(void* v){
 }
 
 void ocl_mem::copyFrom(void* v, size_t offset, size_t s){
-  clEnqueueWriteBuffer(device->getCommandQueue(), memory, CL_TRUE, offset, s, v,0,NULL,NULL);  
+  clEnqueueWriteBuffer(device->getCommandQueue(), memory, CL_TRUE, offset, s, v,0,NULL,NULL);
 }
 
 void ocl_mem::copyFromNB(void* v){
@@ -1115,7 +1115,7 @@ void ocl_mem::copyFromNB(void* v){
 }
 
 void ocl_mem::copyFromNB(void* v, size_t offset, size_t s){
-  clEnqueueWriteBuffer(device->getCommandQueue(), memory, CL_FALSE, offset, s, v,0,NULL,NULL);  
+  clEnqueueWriteBuffer(device->getCommandQueue(), memory, CL_FALSE, offset, s, v,0,NULL,NULL);
 }
 
 cl_mem* ocl_mem::mem(){
@@ -1151,14 +1151,14 @@ namespace ocl{
   const std::string type[] = {
     "char"   , "char16", "char2"   , "char3"   , "char4"  , "char8"  ,
     "cl_mem" , "double", "double16", "double2" , "double3", "double4",
-    "double8", "float" , "float16" , "float2"  , "float3" , "float4" , 
+    "double8", "float" , "float16" , "float2"  , "float3" , "float4" ,
     "float8" , "half"  , "int"     , "int16"   , "int2"   , "int3"   ,
     "int4"   , "int8"  , "long"    , "long16"  , "long2"  , "long3"  ,
     "long4"  , "long8" , "short"   , "short16" , "short2" , "short3" ,
     "short4" , "short8", "uchar"   , "uchar16" , "uchar2" , "uchar3" ,
     "uchar4" , "uchar8", "uint"    , "uint16"  , "uint2"  , "uint3"  ,
-    "uint4"  , "uint8" , "ulong"   , "ulong16" , "ulong2" , "ulong3" , 
-    "ulong4" , "ulong8", "ushort"  , "ushort16", "ushort2", "ushort3", 
+    "uint4"  , "uint8" , "ulong"   , "ulong16" , "ulong2" , "ulong3" ,
+    "ulong4" , "ulong8", "ushort"  , "ushort16", "ushort2", "ushort3",
     "ushort4", "ushort8"
   };
 
@@ -1212,7 +1212,7 @@ namespace ocl{
     int pos = 0;
 
     parseKernel(s,words,wType);
-    
+
     checkParsedKernel(pos,"",ret,words,wType);
 
     return ret.str();
@@ -1224,7 +1224,7 @@ namespace ocl{
     int space = 2;
     char ctmp;
     int fc;
-        
+
     while(pos < wordsSize){
       tmp = words[pos++];
 
@@ -1232,7 +1232,7 @@ namespace ocl{
 	if(!tmp.compare("for")){
 	  fc = 0;
 	  ret << indent << "for";
-	  
+
 
 	  while(pos < wordsSize && words[pos].compare("("))
 	    ret << ' ' << words[pos++];
@@ -1408,7 +1408,7 @@ namespace ocl{
   void parseKernel(std::string s, std::vector<std::string>& words, std::vector<int>& wType){
     const std::string delim1 = "({[)}],;~*%?:^&|-+/!=<>#.";
     const std::string delim2 = "*/^^*=&&/=||--++==!=//+=<<-=>>/*<=>=->";
-    
+
     int length = s.length();
     std::stringstream ret;
     int rSize = 0;
@@ -1416,7 +1416,7 @@ namespace ocl{
     int found1,found2;
     int offset = 0;
     int writing = 1;
-    
+
     for(int i=0;i<length;i++){
       if(isspace(s[i])){
 	if(writing){
@@ -1429,7 +1429,7 @@ namespace ocl{
 	while(i < length && isspace(s[i]))
 	  i++;
       }
-      
+
       if(i < length){
 	found1 = delim1.find(s[i]);
 	if(found1 && !(s[i]-'#')){
@@ -1456,7 +1456,7 @@ namespace ocl{
 
 	  if(found2 != std::string::npos){
 	    words.push_back(s.substr(i,2));
-	    if(!s.substr(i,2).compare("/*")){	      
+	    if(!s.substr(i,2).compare("/*")){
 	      i++;
 	      offset = i+1;
 	      while(++i<length && (s[i] - '*') && ++i<length && (s[i] - '/')){}
@@ -1481,7 +1481,7 @@ namespace ocl{
 	    words.push_back(s.substr(i,1));
 	    wType.push_back(found1);
 	  }
-	  
+
 	  i++;
 	  if(i < length)
 	    found1 = delim1.find(s.substr(i,1));
@@ -1489,12 +1489,12 @@ namespace ocl{
 	else{
 	  words.push_back(s.substr(i,1));
 	  wType.push_back(found1);
-	  
+
 	  i++;
 	  found1 = delim1.find(s.substr(i,1));
 	}
       }
-	
+
       if(found){
 	found = 0;
 	i--;
@@ -1580,7 +1580,7 @@ namespace ocl{
 	      << "sizeof(ushort3) = " << sizeof(cl_ushort3) << std::endl
 	      << "sizeof(ushort4) = " << sizeof(cl_ushort4) << std::endl
 	      << "sizeof(ushort8) = " << sizeof(cl_ushort8) << std::endl;
-  };  
+  };
 };
 
 #endif

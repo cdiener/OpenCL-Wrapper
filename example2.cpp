@@ -9,8 +9,9 @@ string getAddKernel(int);
 int main(){
   // Find all devices
   ocl_device device = ocl::displayDevices();
- 
-  int N = 1024;
+
+  // N is the work-group size in this example
+  int N = device.getGroupSize(0);
 
   // Create a kernel using the device above from vectoradd.cl
   //    Default: Format the kernel to look "nice"
@@ -18,7 +19,7 @@ int main(){
   ocl_kernel kernel(&device,getAddKernel(N));
 
   // We can copy without memory leaks
-  ocl_kernel add = kernel;  
+  ocl_kernel add = kernel;
 
   // Prints the kernel nicely using a parser
   //    Allows for easy debugging
@@ -48,7 +49,7 @@ int main(){
   ocl_mem _a = device.malloc(N*sizeof(float),CL_MEM_READ_ONLY);
   ocl_mem _b = device.malloc(N*sizeof(float),CL_MEM_READ_ONLY);
   ocl_mem _c = device.malloc(N*sizeof(float),CL_MEM_WRITE_ONLY);
-  
+
   // When doing device.malloc, the variable gets the size and is able to copy
   //   and write without needing the size again
   _a.copyFrom(a);
@@ -69,7 +70,7 @@ int main(){
   // We can also set the args manually (which is useful when checking constants)
   add.setArg(0,&N);
 
-  // When doing multiple executes, it is faster to set the dimension before 
+  // When doing multiple executes, it is faster to set the dimension before
   //   executing.
   add.setDims(N,N);
 
@@ -81,8 +82,8 @@ int main(){
 
   // Copy device variable _c to host variable c
   _c.copyTo(c);
-  
-  // Output c 
+
+  // Output c
   // Should be 0,1,...,N-1
   for(int i=0;i<N;i++)
     cout << c[i] << ',';
@@ -114,7 +115,7 @@ string getAddKernel(int size){
       << "for(int i=0;i<20;i++){"
       << "}"
       << "if(0);"
-      << '}';  
+      << '}';
 
   return ret.str();
 }
