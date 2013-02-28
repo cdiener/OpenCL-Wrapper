@@ -1,6 +1,6 @@
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #  OCL-Library
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -20,7 +20,7 @@ include_directories("${PROJECT_SOURCE_DIR}")
 
 
 if (MSVC)
-   add_definitions( -D_CRT_SECURE_NO_WARNINGS  -W3 )    
+   add_definitions( -D_CRT_SECURE_NO_WARNINGS  -W3 )
 endif(MSVC)
 
 
@@ -43,5 +43,5 @@ target_link_libraries(example3 OCL_Library ${OPENCL_LIBRARIES})
 install(TARGETS example1 example2 example3
         DESTINATION bin)
 
-install(FILES vectoradd.cl 
+install(FILES vectoradd.cl
         DESTINATION bin)
