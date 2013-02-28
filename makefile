@@ -1,24 +1,42 @@
-# Let hPath equal to the directory the ocl files are stored in
-#   If they are in the current directory, leave blank
-hPath = .
+# Object/Include directories
+oPath = ./
+iPath = ./
 
-# Change -I/usr/local/cuda/include to the location where your
-#   cl.h file is in
-paths = -I${hPath} -I/usr/local/cuda/include
+# Paths
+paths = -I./$(iPath)
 
-# Change -L/usr/local/cuda/lib to the location where your
-#   OpenCL libraries are stored in
-links = -lm -L/usr/local/cuda/lib -lOpenCL
-sources = example3.cpp ocl.cpp 
-objects = $(sources:.cpp=.o)
+# OS Detection
+ifdef SystemRoot
 
-all: example
-	rm *.o
-example: $(objects)
-	g++ -g $(objects) $(paths) $(links)
-%.o:%.cpp
-	g++ -g -c -w $(paths) $<
+links =
+flags = -D 'OCL_WINDOWS'
+
+else
+
+ifeq ($(shell uname -s),Darwin)
+
+links = -framework OpenCL -framework Accelerate -lm
+flags = -D 'OCL_OSX'
+
+else
+
+links = -lOpenCL -lm
+flags = -D 'OCL_LINUX'
+
+endif
+endif
+
+# Substitutes files with the includes/objects paths
+mainSource = example1.cpp
+sources    = ocl.cpp
+includes   = $(addprefix $(iPath)/,$(sources))
+objects    = $(addprefix $(oPath)/,$(sources:.cpp=.o))
+
+main: $(objects) $(mainSource)
+	g++ $(flags) -g $(paths) $(links) $(objects) $(mainSource) -o main
+
+$(oPath)/%.o:$(iPath)/%.cpp
+	g++ $(flags) -g -c $(paths) $< -o $(subst $(iPath),$(oPath),$(<:.cpp=.o))
+
 clean:
-	rm *.o;
-
-VPATH = src:$(hPath)
+	rm $(oPath)/*.o;
